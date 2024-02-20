@@ -6,23 +6,23 @@ from phonenumber_field.modelfields import PhoneNumberField
 # Create your views here.
 
 class MyUserManager(UserManager):
-    def _create_user(self, phone_number, email, password, **extra_fields):
+    def _create_user(self, phone_number, role, email, password, **extra_fields):
         if not phone_number:
             raise ValueError("The given phone number must be set")
 
         email = self.normalize_email(email)
-        user = self.model(phone_number=phone_number, email=email, **extra_fields)
+        user = self.model(phone_number=phone_number, role=role, email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_user(self, phone_number, email=None, password=None, **extra_fields):
+    def create_user(self, phone_number, role="CUS", email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-        return self._create_user(phone_number, email, password, **extra_fields)
+        return self._create_user(phone_number, email, role, password, **extra_fields)
     
-    def create_superuser(self, phone_number, email=None, password=None, **extra_fields):
+    def create_superuser(self, phone_number, role="CUS", email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -31,14 +31,7 @@ class MyUserManager(UserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        return self._create_user(phone_number, email, password, **extra_fields)
-    
-
-ROLE_CHOICES = ( 
-    ("CUS", "Customer"), 
-    ("ADM", "Admin"), 
-    ("REP", "Repair Man"), 
-) 
+        return self._create_user(phone_number, role, email, password, **extra_fields)
 
 
 class MyUser(AbstractUser):
@@ -55,7 +48,7 @@ class MyUser(AbstractUser):
 
     USERNAME_FIELD = "phone_number"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = [role]
+    REQUIRED_FIELDS = []
     objects = MyUserManager()
 
     def __str__(self):
