@@ -8,6 +8,7 @@ from .forms import MyUserChangeForm, MyUserCreationForm
 class CustomAdmin(UserAdmin):
     add_form_template = "admin/auth/user/add_form.html"
     change_user_password_template = None
+    change_user_id_template = None
 
     fieldsets = (
         (None, {"fields": ("phone_number", "password")}),

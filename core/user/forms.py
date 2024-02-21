@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from .models import MyUser
 
@@ -9,4 +10,8 @@ class MyUserChangeForm(UserChangeForm):
 class MyUserCreationForm(UserCreationForm):
     class Meta:
         model = MyUser
-        fields = ['phone_number', 'email', 'first_name', 'last_name']
+        fields = ("phone_number", "password1", "password2")
+
+class LoginForm(forms.Form):
+    phone_number = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
