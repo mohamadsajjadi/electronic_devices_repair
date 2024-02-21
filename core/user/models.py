@@ -3,6 +3,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
+import uuid
+
 # Create your views here.
 
 class MyUserManager(UserManager):
@@ -37,10 +39,11 @@ class MyUserManager(UserManager):
 class MyUser(AbstractUser):
 
     ROLE_CHOICES = ( 
-    ("CUS", "Customer"), 
-    ("REP", "Repair Man"), 
+        ("CUS", "Customer"), 
+        ("REP", "Repair Man"), 
     ) 
-
+    
+    id = models.UUIDField(primary_key = True,default = uuid.uuid4, editable = False)
     username = None
     role = models.CharField(max_length=16,choices=ROLE_CHOICES, default='CUS')
     email = models.EmailField(unique=False, blank=True)
