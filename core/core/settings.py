@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Application
+    'user',
+    'projects.apps.ProjectsConfig',
+    
     # Third Party
     "phonenumber_field",
     "bootstrap5",
 
-    # Application
-    "user",
 ]
 
 MIDDLEWARE = [
