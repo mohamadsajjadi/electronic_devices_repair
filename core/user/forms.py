@@ -15,3 +15,8 @@ class MyUserCreationForm(UserCreationForm):
 class LoginForm(forms.Form):
     phone_number = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+class MyUserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = MyUser
+        fields = ['role', 'email', 'first_name', 'last_name']

@@ -4,9 +4,11 @@
 
 
 {% block content %}
+<h1>Login to your account</h1>
+<p>Please, login using the following form:</p>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-   <input type="submit" value="Submit">
+   <input type="submit" value="Login To Your Account">
 </form>
 {% endblock %}

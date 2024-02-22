@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from .forms import MyUserCreationForm, LoginForm
+from .forms import MyUserCreationForm, LoginForm, MyUserUpdateForm
 from .models import MyUser
 
 # Create your views here.
@@ -51,5 +51,20 @@ def change_passsword(request):
     return HttpResponse("you can change your password here")
 
 @login_required
-def change_user_data(request):
-    return HttpResponse("you can change your data here")
+def update_user_data(request, user_id):
+    print(user_id)
+    user_obj = get_object_or_404(MyUser, pk=user_id)
+    
+    if user_obj.id != request.user.id:
+        return HttpResponse('Forbbiden request')
+
+
+    form = MyUserUpdateForm(instance=user_obj)
+    if request.method == 'POST':
+        form = MyUserUpdateForm(request.POST or None, instance=user_obj)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse_lazy('profile'))
+        
+    
+    return render(request, 'accounts/update.html', {'form' : form})
