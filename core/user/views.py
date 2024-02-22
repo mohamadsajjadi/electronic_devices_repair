@@ -1,17 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import MyUserCreationForm, LoginForm
+from .forms import MyUserCreationForm, LoginForm, MyUserUpdateForm
 from .models import MyUser
 
 # Create your views here.
 
 @login_required
 def home_page(request):
-    return HttpResponse("you're fucking home page")
+    return render(request, 'home.html', {})
 
 def register(request):
     if request.method == "POST":
@@ -44,12 +44,26 @@ def login_user(request):
 
 @login_required
 def profile(request):
-    return HttpResponse("you're fucking profile")
+    return render(request, 'accounts/profile.html', {})
 
 @login_required
 def change_passsword(request):
     return HttpResponse("you can change your password here")
 
 @login_required
-def change_user_data(request):
-    return HttpResponse("you can change your data here")
+def update_user_data(request):
+    user_obj = get_object_or_404(MyUser, pk=request.user.id)
+    
+    form = MyUserUpdateForm(instance=user_obj)
+    if request.method == 'POST':
+        form = MyUserUpdateForm(request.POST or None, instance=user_obj)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse_lazy('profile'))
+        
+    return render(request, 'accounts/update.html', {'form' : form})
+
+@login_required
+def logout_user(request):
+    logout(request)
+    return redirect(reverse_lazy("accounts:login"))
