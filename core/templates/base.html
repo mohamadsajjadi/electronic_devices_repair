@@ -15,23 +15,25 @@
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
           <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
         </a>
-
+        
+        {% if user.is_authenticated %}
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
           <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+          <li><a href="{% url 'accounts:profile' %}" class="nav-link px-2 text-white">Profile</a></li>
+          <li><a href="{% url 'accounts:update' %}" class="nav-link px-2 text-white">Update</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Change Password</a></li>
+          <li><a href="{% url 'accounts:logout' %}" class="nav-link px-2 text-white">Logout</a></li>
         </ul>
-
+        {% else %}
+        <div class="text-end">
+          <a type="button" href="{% url 'accounts:login' %}" class="btn btn-success">Login</a>
+          <a type="button" href="{% url 'accounts:register' %}" class="btn btn-warning">Sign-up</a>
+        </div>
+        {% endif %}
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
           <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
         </form>
-
-        <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Login</button>
-          <button type="button" class="btn btn-warning">Sign-up</button>
-        </div>
       </div>
     </div>
   </header>

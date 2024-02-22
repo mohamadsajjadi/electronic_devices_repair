@@ -132,3 +132,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PHONENUMBER_DEFAULT_REGION = "IR"
 AUTH_USER_MODEL = "user.MyUser"
+LOGIN_REDIRECT_URL = 'accounts/profile'
