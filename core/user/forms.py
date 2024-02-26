@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.core.exceptions import ValidationError
 from .models import MyUser
 
 class MyUserChangeForm(UserChangeForm):
@@ -20,3 +21,14 @@ class MyUserUpdateForm(forms.ModelForm):
     class Meta:
         model = MyUser
         fields = ['role', 'email', 'first_name', 'last_name']
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(label='current password', widget=forms.PasswordInput)
+    new_password = forms.CharField(label='new password', widget=forms.PasswordInput)
+    new_password_confirm = forms.CharField(label='new password confirm', widget=forms.PasswordInput)
+    
+    def save(self):
+        cd = self.cleaned_data
+        if self.new_password != self.new_password_confirm:
+            raise ValidationError('password are not the same')
+        

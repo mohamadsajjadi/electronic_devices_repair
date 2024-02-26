@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .forms import MyUserCreationForm, LoginForm, MyUserUpdateForm
+from .forms import MyUserCreationForm, LoginForm, MyUserUpdateForm, ChangePasswordForm
 from .models import MyUser
 
 # Create your views here.
@@ -48,6 +48,16 @@ def profile(request):
 
 @login_required
 def change_passsword(request):
+    user_obj = get_object_or_404(MyUser, pk=request.user.id)
+    form = ChangePasswordForm()
+
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            if user_obj:
+                user_obj.set_password(cd['new_password'])
+
     return HttpResponse("you can change your password here")
 
 @login_required
