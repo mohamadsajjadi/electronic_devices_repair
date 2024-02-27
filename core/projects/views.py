@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from .models import Project, ProjectStatus
-from .forms import CreateOfferForm, CreateProjectForm
+from .forms import CreateProjectForm
 # Create your views here.
 
 @login_required
@@ -42,7 +42,7 @@ def delete_project(request, project_id):
 
 def project_datail(request, project_id):
     project_obj = Project.objects.get(id=project_id)
-    return render(request, 'project/project_detail.html', {'project_obj' : project_obj})
+    return render(request, 'project/project_detail.html', {'project' : project_obj})
 
 def project_list(request, category=None):
     category = None

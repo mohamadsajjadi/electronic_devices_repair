@@ -8,4 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('user.urls'), name='accounts'),
     path('project/', include('projects.urls'), name='projects'),
+    path('offer/', include('offer.urls'), name='offer'),
 ]

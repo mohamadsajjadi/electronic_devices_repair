@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # Application
     'user',
+    'offer',
     'projects.apps.ProjectsConfig',
     
     # Third Party
