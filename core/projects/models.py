@@ -28,6 +28,7 @@ class ProjectStatus(models.TextChoices):
 class Project(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=512)
     content = models.TextField()
     status = models.CharField(max_length=64, choices=ProjectStatus.choices, default=ProjectStatus.waiting)
     category = models.ForeignKey(Category,  related_name='catrgory_project', on_delete=models.CASCADE)
@@ -39,6 +40,6 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.content[:30]
+        return self.title
     
 
