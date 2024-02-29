@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Application
     'user',
     'offer',
+    'payment',
     'projects.apps.ProjectsConfig',
     
     # Third Party
