@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Make an offer{% endblock %}
+
+
+{% block content %}
+<h1>Meke an offer</h1>
+<p>the project you offering is {{project.title}}:</p>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+   <input type="submit" value="Login To Your Account">
+</form>
+{% endblock %}

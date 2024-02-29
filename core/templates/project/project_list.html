@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Make an offer{% endblock %}
+
+{% block content %}
+    <h1>List of offers</h1>
+    <hr>
+    {% for project in projects %}
+        <p>{{project.title}}</p>
+        <small>{{project.employer}}</small>
+        <p>{{project.content}} ----- {{project.status}}</p>
+        <p>{{project.expected_price}} ----- {{project.expected_time}}</p>
+        <a class='btn btn-success' style='margin:5px' href="{% url 'offer:create_offer' project.id  %}">Create an offer</a>
+        <a class='btn btn-info' style='margin:5px' href="{% url 'offer:offers_list' project.id %}">Check for offers</a>
+        <hr>
+        <hr>
+    {% endfor %}
+{% endblock %}

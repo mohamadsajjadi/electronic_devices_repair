@@ -27,8 +27,9 @@ class ChangePasswordForm(forms.Form):
     new_password = forms.CharField(label='new password', widget=forms.PasswordInput)
     new_password_confirm = forms.CharField(label='new password confirm', widget=forms.PasswordInput)
     
-    def save(self):
+    def clean(self):
         cd = self.cleaned_data
-        if self.new_password != self.new_password_confirm:
+        if cd['new_password'] != cd['new_password_confirm']:
             raise ValidationError('password are not the same')
+        return cd
         

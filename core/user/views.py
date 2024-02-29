@@ -50,15 +50,21 @@ def profile(request):
 def change_passsword(request):
     user_obj = get_object_or_404(MyUser, pk=request.user.id)
     form = ChangePasswordForm()
+    message = None
 
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            if user_obj:
+            user_auth = authenticate(request, username=user_obj.phone_number, password=cd['old_password'])
+            if user_obj and user_auth:
                 user_obj.set_password(cd['new_password'])
+                return redirect(reverse_lazy('accounts:profile'))
+            else:
+                message = 'old password is not correct'
+            
 
-    return HttpResponse("you can change your password here")
+    return render(request, 'accounts/update.html', {'form' : form, 'meesage':message})
 
 @login_required
 def update_user_data(request):
@@ -69,7 +75,7 @@ def update_user_data(request):
         form = MyUserUpdateForm(request.POST or None, instance=user_obj)
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('profile'))
+            return redirect(reverse_lazy('accounts:profile'))
         
     return render(request, 'accounts/update.html', {'form' : form})
 
