@@ -1,17 +1,20 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-
-from .models import Project
+from django.http import HttpResponse
+from projects.models import Project, ProjectStatus
+from .models import Offer, OfferStatus
 from .forms import CreateOfferForm
 # Create your views here.
 
 @login_required
 def create_offer(request, project_id):
-    form = CreateOfferForm()
-    project = Project.objects.get(id=project_id)
+    if request.user.role != 'REP':
+        return HttpResponse('Forbidden', status=403)
 
+    form = CreateOfferForm()
+    project = get_object_or_404(Project, id=project_id)
     if request.method == "POST":
         form = CreateOfferForm(request.POST)
         if form.is_valid():
@@ -24,6 +27,30 @@ def create_offer(request, project_id):
 
 @login_required
 def offers_list(request, project_id):
-    project = Project.objects.get(id=project_id)
-    offers = project.project_offer.all()
+    project = get_object_or_404(Project ,id=project_id)
+
+    has_already_accepted = project.project_offer.filter(status=OfferStatus.accepted)
+    if has_already_accepted:
+        return redirect(reverse_lazy("projects:project_list"))
+    
+    offers = project.project_offer.filter(status=OfferStatus.pending)
     return render(request, 'offer/offer_list.html', {'offers' : offers, 'project' : project})
+
+def change_offer(request, offer_id, change):
+    offer_obj = Offer.objects.get(id=offer_id)
+    project_obj = Project.objects.get(id=offer_obj.project_id.id)
+
+    if project_obj.employer != request.user:
+        return HttpResponse('forbidden', status=403)
+        
+    if change == 'accept':
+        project_obj.status = ProjectStatus.taken
+        offer_obj.status = OfferStatus.accepted
+    if change == 'reject':
+        offer_obj.status = OfferStatus.rejected
+
+    offer_obj.save()
+    project_obj.save()
+
+    return redirect(reverse_lazy("projects:project_list"))
+    

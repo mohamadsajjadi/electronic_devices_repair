@@ -5,6 +5,9 @@
 {% block content %}
 <h1>Update your account</h1>
 <p>Please, update using the following form:</p>
+{% comment %} {% if message %} {% endcomment %}
+<h1>{{message}}</h1>
+{% comment %} {% endif %} {% endcomment %}
 <form action="" method="post">
     {{ form.as_p }}
     {% csrf_token %}

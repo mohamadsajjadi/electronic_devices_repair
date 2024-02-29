@@ -21,6 +21,7 @@ class Rate(models.Model):
 
 class ProjectStatus(models.TextChoices):
     in_process = 'In Process', 'in_process'
+    taken = 'Taken', 'taken'
     waiting = 'Waiting', 'waiting'
     archive = 'Archive', 'archive'
     done = 'Done', 'done'
